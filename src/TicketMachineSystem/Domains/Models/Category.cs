@@ -3,7 +3,7 @@
     /// <summary>
     /// カテゴリークラス
     /// </summary>
-    internal class Category
+    public class Category
     {
         private int _no { get; }
 

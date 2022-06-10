@@ -11,14 +11,30 @@ namespace TicketMachineSystem.Infrastructures.Csv
     public sealed class MenuCsv : IMenuRepository
     {
         /// <summary>
+        /// 全メニュー取得
+        /// </summary>
+        /// <returns>全メニュー</returns>
+        public IEnumerable<Menu> GetAllMenu()
+        {
+            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",");
+        }
+
+        /// <summary>
         /// メインメニュー取得
         /// </summary>
         /// <returns>取得結果</returns>
         public IEnumerable<Menu> GetMainMenu()
         {
-            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == 1);
+            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryType.Main);
         }
 
+        /// <summary>
+        /// オプション取得
+        /// </summary>
+        /// <returns>取得結果</returns>
+        /// <exception cref="NotImplementedException"></exception>
         public IEnumerable<Menu> GetOption()
         {
             throw new NotImplementedException();

@@ -23,6 +23,7 @@ namespace TicketMachineSystem.Domains.Helpers
             var config = new CsvConfiguration(CultureInfo.CurrentCulture)
             {
                 Delimiter = delimiter,
+                PrepareHeaderForMatch = args => args.Header.ToLower(),
             };
             using (var reader = new StreamReader(filepath, encoding))
             using (var csv = new CsvReader(reader, config))

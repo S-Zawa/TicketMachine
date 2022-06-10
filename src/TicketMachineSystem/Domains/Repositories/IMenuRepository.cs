@@ -8,6 +8,12 @@ namespace TicketMachineSystem.Domains.Repositories
     public interface IMenuRepository
     {
         /// <summary>
+        /// 全メニュー取得
+        /// </summary>
+        /// <returns>全メニュー</returns>
+        IEnumerable<Menu> GetAllMenu();
+
+        /// <summary>
         /// メインメニュー取得
         /// </summary>
         /// <returns>メインメニュー</returns>

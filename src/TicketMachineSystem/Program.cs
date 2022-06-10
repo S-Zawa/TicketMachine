@@ -1,4 +1,5 @@
 ﻿using TicketMachineSystem.Domains.Models;
+using TicketMachineSystem.Infrastructures.Csv;
 
 namespace TicketMachineSystem // Note: actual namespace depends on the project name.
 {
@@ -9,13 +10,9 @@ namespace TicketMachineSystem // Note: actual namespace depends on the project n
     {
         private static void Main(string[] args)
         {
-            var ticketMachine = new TicketMachine();
-
-            var mainMenu = new Category(1);
-            mainMenu.AddMenu(new Menu("牛丼", 1, 1, 1, 380));
-            mainMenu.AddMenu(new Menu("豚丼", 1, 1, 1, 350));
-            mainMenu.AddMenu(new Menu("鮭定食", 1, 1, 0, 450));
-
+            var ticketMachine = new TicketMachine(new MenuCsv());
+            ticketMachine.ShowMainMenu();
+            Console.ReadLine();
             var total = ticketMachine.GetTotal();
             Console.WriteLine($"合計金額:{total}円");
         }
