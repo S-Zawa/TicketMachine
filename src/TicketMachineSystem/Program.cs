@@ -10,7 +10,7 @@ namespace TicketMachineSystem // Note: actual namespace depends on the project n
     {
         private static void Main(string[] args)
         {
-            var ticketMachine = new TicketMachine(new MenuCsv());
+            var ticketMachine = new TicketMachine(new MenuCsv(), new CategoryCsv());
             ticketMachine.ShowMainMenu();
             Console.ReadLine();
             var total = ticketMachine.GetTotal();

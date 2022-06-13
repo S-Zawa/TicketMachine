@@ -1,4 +1,5 @@
-﻿using TicketMachineSystem.Domains.Helpers;
+﻿using TicketMachineSystem.Domains.Entities;
+using TicketMachineSystem.Domains.Helpers;
 using TicketMachineSystem.Domains.Repositories;
 using TicketMachineSystem.Infrastructures;
 
@@ -11,6 +12,7 @@ namespace TicketMachineSystem.Domains.Models
     {
         private static readonly int DiscountAmount = 50;
         private IMenuRepository _menuRepository;
+        private ICategoryRepository _categoryRepository;
 
         private Category[] _categories = new Category[4];
         private List<Menu> _selectedMenus = new List<Menu>();
@@ -24,7 +26,7 @@ namespace TicketMachineSystem.Domains.Models
         /// コンストラクタ
         /// </summary>
         public TicketMachine()
-            : this(Factories.CreateMenuRepository())
+            : this(Factories.CreateMenuRepository(), Factories.CreateCategoryRepository())
         {
         }
 
@@ -32,12 +34,27 @@ namespace TicketMachineSystem.Domains.Models
         /// コンストラクタ
         /// </summary>
         /// <param name="menuRepository">メニューリポジトリ</param>
-        public TicketMachine(IMenuRepository menuRepository)
+        /// <param name="categoryRepository">カテゴリリポジトリ</param>
+        public TicketMachine(IMenuRepository menuRepository, ICategoryRepository categoryRepository)
         {
             this._menuRepository = menuRepository;
-            this._menus = menuRepository.GetAllMenu().ToList();
-            this._mainMenus = menuRepository.GetMainMenu().ToList();
+            this._categoryRepository = categoryRepository;
+
+            this._menus = this._menuRepository.GetAllMenu().ToList();
+            this._mainMenus = this._menuRepository.GetMainMenu().ToList();
+
+            var categories = this._categoryRepository.GetAll().ToList();
+
+            var mainCategory = categories?.FirstOrDefault(x => x.No == CategoryNo.Main);
+            this.MainMenu = new MainMenu(mainCategory, this._menuRepository.GetMainMenu().ToList());
         }
+
+        public CategoryMenu CategoryMenu { get; }
+
+        /// <summary>
+        /// メインメニュー
+        /// </summary>
+        public MainMenu MainMenu { get; }
 
         /// <summary>
         /// 選択したメニュー一覧
@@ -88,7 +105,7 @@ namespace TicketMachineSystem.Domains.Models
         {
             var total = this._selectedMenus.Sum(selectedMenu => selectedMenu.Price);
 
-            var isDiscount = this._selectedMenus.Select(x => x.N).ToList().ContainsAll(new CategoryType[] { CategoryType.Main, CategoryType.Side1, CategoryType.Side2 });
+            var isDiscount = this._selectedMenus.Select(x => x.N).ToList().ContainsAll(new CategoryNo[] { CategoryNo.Main, CategoryNo.Side1, CategoryNo.Side2 });
             if (isDiscount)
             {
                 total -= DiscountAmount;
@@ -102,11 +119,11 @@ namespace TicketMachineSystem.Domains.Models
         /// </summary>
         public void ShowMainMenu()
         {
-            Console.WriteLine("---メインメニュー---");
+            Console.WriteLine(this.MainMenu.Category.DisplayName);
 
-            foreach (var mainMenu in this._mainMenus)
+            foreach (var mainMenu in this.MainMenu.Menus)
             {
-                Console.WriteLine($"{nameof(mainMenu.Id)}:{mainMenu.Id} {nameof(mainMenu.Name)}:{mainMenu.Name} {nameof(mainMenu.Price)}:{mainMenu.DisplayPrice}");
+                Console.WriteLine($"{nameof(mainMenu.No)}:{mainMenu.No} {nameof(mainMenu.Name)}:{mainMenu.Name} {nameof(mainMenu.Price)}:{mainMenu.DisplayPrice}");
             }
         }
 
@@ -120,7 +137,7 @@ namespace TicketMachineSystem.Domains.Models
             var lastSelectedMenu = this._selectedMenus.LastOrDefault();
             foreach (var option in this._options.Where(x => x.O == lastSelectedMenu?.O))
             {
-                Console.WriteLine($"{nameof(option.Id)}:{option.Id} {nameof(option.Name)}:{option.Name} {nameof(option.Price)}:{option.DisplayPrice}");
+                Console.WriteLine($"{nameof(option.No)}:{option.No} {nameof(option.Name)}:{option.Name} {nameof(option.Price)}:{option.DisplayPrice}");
             }
         }
 
@@ -139,7 +156,7 @@ namespace TicketMachineSystem.Domains.Models
         /// <returns>有効な入力番号か</returns>
         public bool AddSelectedMenu(int id)
         {
-            var selectedMenu = _menus?.FirstOrDefault(x => x?.Id == id);
+            var selectedMenu = this._menus?.FirstOrDefault(x => x?.No == id);
 
             if (selectedMenu == null)
             {

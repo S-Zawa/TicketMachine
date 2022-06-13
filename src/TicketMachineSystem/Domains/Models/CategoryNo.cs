@@ -3,7 +3,7 @@
     /// <summary>
     /// 分類番号
     /// </summary>
-    public enum CategoryType
+    public enum CategoryNo
     {
         /// <summary>
         /// メインメニュー

@@ -16,5 +16,14 @@ namespace TicketMachineSystem.Infrastructures
         {
             return new MenuCsv();
         }
+
+        /// <summary>
+        /// カテゴリリポジトリ作成
+        /// </summary>
+        /// <returns>カテゴリリポジトリ</returns>
+        public static ICategoryRepository CreateCategoryRepository()
+        {
+            return new CategoryCsv();
+        }
     }
 }

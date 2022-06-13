@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using TicketMachineSystem.Domains.Entities;
 using TicketMachineSystem.Domains.Helpers;
 using TicketMachineSystem.Domains.Models;
 using TicketMachineSystem.Domains.Repositories;
@@ -27,27 +28,37 @@ namespace TicketMachineSystem.Infrastructures.Csv
         public IEnumerable<Menu> GetMainMenu()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryType.Main);
+            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Main);
         }
 
         /// <summary>
         /// オプション取得
         /// </summary>
         /// <returns>取得結果</returns>
-        /// <exception cref="NotImplementedException"></exception>
         public IEnumerable<Menu> GetOption()
         {
-            throw new NotImplementedException();
+            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Option);
         }
 
+        /// <summary>
+        /// サイドメニュー1取得
+        /// </summary>
+        /// <returns>取得結果</returns>
         public IEnumerable<Menu> GetSide1()
         {
-            throw new NotImplementedException();
+            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Side1);
         }
 
+        /// <summary>
+        /// サイドメニュー2取得
+        /// </summary>
+        /// <returns>取得結果</returns>
         public IEnumerable<Menu> GetSide2()
         {
-            throw new NotImplementedException();
+            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Side2);
         }
     }
 }

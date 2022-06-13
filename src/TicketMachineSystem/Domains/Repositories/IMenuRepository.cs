@@ -1,4 +1,4 @@
-﻿using TicketMachineSystem.Domains.Models;
+﻿using TicketMachineSystem.Domains.Entities;
 
 namespace TicketMachineSystem.Domains.Repositories
 {

@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <CodeAnalysisRuleSet>..\TicketMachineSystem.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="category.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="menu.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

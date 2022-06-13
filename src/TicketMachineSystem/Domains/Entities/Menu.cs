@@ -1,4 +1,6 @@
-﻿namespace TicketMachineSystem.Domains.Models
+﻿using TicketMachineSystem.Domains.Models;
+
+namespace TicketMachineSystem.Domains.Entities
 {
     /// <summary>
     /// メニュークラス
@@ -8,17 +10,15 @@
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        /// <param name="id">ID</param>
-        /// <param name="categoryType">分類番号</param>
+        /// <param name="no">no</param>
         /// <param name="name">名前</param>
         /// <param name="n">N</param>
         /// <param name="s">S</param>
         /// <param name="o">O</param>
         /// <param name="price">価格</param>
-        public Menu(int id, CategoryType categoryType, string name, CategoryType n, int s, int o, int price)
+        public Menu(int no, string name, CategoryNo n, int s, int o, int price)
         {
-            this.Id = id;
-            this.CategoryType = categoryType;
+            this.No = no;
             this.Name = name;
             this.N = n;
             this.S = s;
@@ -27,14 +27,9 @@
         }
 
         /// <summary>
-        /// ID
+        /// No
         /// </summary>
-        public int Id { get; }
-
-        /// <summary>
-        /// 分類番号
-        /// </summary>
-        public CategoryType CategoryType { get; }
+        public int No { get; }
 
         /// <summary>
         /// 商品名
@@ -44,10 +39,16 @@
         /// <summary>
         /// 分類番号
         /// </summary>
-        public CategoryType N { get; }
+        public CategoryNo N { get; }
 
+        /// <summary>
+        /// S
+        /// </summary>
         public int S { get; }
 
+        /// <summary>
+        /// O
+        /// </summary>
         public int O { get; }
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace TicketMachineSystem.Tests
         [Fact]
         public void AddSelectedMenu_ExistingMenu()
         {
-            var ticketMachine = new TicketMachine(new MenuCsv());
+            var ticketMachine = new TicketMachine(new MenuCsv(), new CategoryCsv());
             var isValid = ticketMachine.AddSelectedMenu(1);
 
             Assert.True(isValid);
@@ -19,7 +19,7 @@ namespace TicketMachineSystem.Tests
         [Fact]
         public void AddSelectedMenu_NotExistingMenu()
         {
-            var ticketMachine = new TicketMachine(new MenuCsv());
+            var ticketMachine = new TicketMachine(new MenuCsv(), new CategoryCsv());
 
             // ñ≥å¯Ç»è§ïiî‘çÜ
             var isValid = ticketMachine.AddSelectedMenu(999);
