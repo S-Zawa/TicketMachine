@@ -11,50 +11,35 @@ namespace TicketMachineSystem.Infrastructures.Csv
     /// </summary>
     public sealed class MenuCsv : IMenuRepository
     {
-        /// <summary>
-        /// 全メニュー取得
-        /// </summary>
-        /// <returns>全メニュー</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetAllMenu()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",");
         }
 
-        /// <summary>
-        /// メインメニュー取得
-        /// </summary>
-        /// <returns>取得結果</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetMainMenu()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Main);
         }
 
-        /// <summary>
-        /// オプション取得
-        /// </summary>
-        /// <returns>取得結果</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetOption()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Option);
         }
 
-        /// <summary>
-        /// サイドメニュー1取得
-        /// </summary>
-        /// <returns>取得結果</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetSide1()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Side1);
         }
 
-        /// <summary>
-        /// サイドメニュー2取得
-        /// </summary>
-        /// <returns>取得結果</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetSide2()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);

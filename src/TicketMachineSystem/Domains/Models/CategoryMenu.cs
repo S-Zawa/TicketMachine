@@ -19,6 +19,16 @@ namespace TicketMachineSystem.Domains.Models
         }
 
         /// <summary>
+        /// 分類
+        /// </summary>
+        public Category Category { get; }
+
+        /// <summary>
+        /// メニュー
+        /// </summary>
+        public List<Menu> Menus { get; }
+
+        /// <summary>
         /// バリデーション
         /// </summary>
         /// <param name="category">分類</param>
@@ -28,15 +38,5 @@ namespace TicketMachineSystem.Domains.Models
         {
             return true;
         }
-
-        /// <summary>
-        /// 分類
-        /// </summary>
-        public Category Category { get; }
-
-        /// <summary>
-        /// メニュー
-        /// </summary>
-        public List<Menu> Menus { get; }
     }
 }

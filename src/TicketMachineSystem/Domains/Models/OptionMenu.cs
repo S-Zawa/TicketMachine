@@ -3,22 +3,18 @@
 namespace TicketMachineSystem.Domains.Models
 {
     /// <summary>
-    /// メインメニュー
+    /// オプション
     /// </summary>
-    public class MainMenu : CategoryMenu
+    public class OptionMenu : CategoryMenu
     {
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="category">カテゴリ</param>
         /// <param name="menus">メニュー</param>
-        public MainMenu(Category category, List<Menu> menus)
+        public OptionMenu(Category category, List<Menu> menus)
             : base(category, menus)
         {
-            if (!this.IsValid(category, menus))
-            {
-                throw new ArgumentException();
-            }
         }
 
         /// <inheritdoc/>
@@ -29,12 +25,12 @@ namespace TicketMachineSystem.Domains.Models
                 return false;
             }
 
-            if (category.No != CategoryNo.Main)
+            if (category.No != CategoryNo.Option)
             {
                 return false;
             }
 
-            if (menus.Any(x => x.N != CategoryNo.Main))
+            if (menus.Any(x => x.N != CategoryNo.Option))
             {
                 return false;
             }

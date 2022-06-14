@@ -8,46 +8,31 @@ namespace TicketMachineSystem.Infrastructures.Sqlite
     /// </summary>
     public class MenuSqlite : IMenuRepository
     {
-        /// <summary>
-        /// 全メニュー取得
-        /// </summary>
-        /// <returns>全メニュー</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetAllMenu()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// メインメニュー取得
-        /// </summary>
-        /// <returns>メインメニュー</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetMainMenu()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// オプション取得
-        /// </summary>
-        /// <returns>オプション</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetOption()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// サイドメニュー1取得
-        /// </summary>
-        /// <returns>サイドメニュー1</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetSide1()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// サイドメニュー2取得
-        /// </summary>
-        /// <returns>サイドメニュー2</returns>
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetSide2()
         {
             throw new NotImplementedException();

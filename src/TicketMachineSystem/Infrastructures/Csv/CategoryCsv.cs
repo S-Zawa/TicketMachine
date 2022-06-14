@@ -10,10 +10,7 @@ namespace TicketMachineSystem.Infrastructures.Csv
     /// </summary>
     public class CategoryCsv : ICategoryRepository
     {
-        /// <summary>
-        /// 全カテゴリ取得
-        /// </summary>
-        /// <returns>全カテゴリ</returns>
+        /// <inheritdoc/>
         public IEnumerable<Category> GetAll()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);

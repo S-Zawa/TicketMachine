@@ -1,4 +1,5 @@
-﻿using TicketMachineSystem.Domains.Models;
+﻿using TicketMachineSystem.Domains.Helpers;
+using TicketMachineSystem.Domains.Models;
 
 namespace TicketMachineSystem.Domains.Entities
 {
@@ -63,7 +64,7 @@ namespace TicketMachineSystem.Domains.Entities
         {
             get
             {
-                return this.Price.ToString("C");
+                return this.Price.ToStringYen();
             }
         }
     }
