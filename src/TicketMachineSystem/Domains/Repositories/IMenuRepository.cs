@@ -1,4 +1,5 @@
 ﻿using TicketMachineSystem.Domains.Entities;
+using TicketMachineSystem.Domains.Models;
 
 namespace TicketMachineSystem.Domains.Repositories
 {
@@ -7,6 +8,13 @@ namespace TicketMachineSystem.Domains.Repositories
     /// </summary>
     public interface IMenuRepository
     {
+        /// <summary>
+        /// 分類番号でメニューを取得
+        /// </summary>
+        /// <param name="categoryNo">分類番号</param>
+        /// <returns>分類番号に一致したメニュー</returns>
+        IEnumerable<Menu> GetByCategoryNo(CategoryNo categoryNo);
+
         /// <summary>
         /// 全メニュー取得
         /// </summary>

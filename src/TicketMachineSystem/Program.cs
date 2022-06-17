@@ -13,7 +13,7 @@ namespace TicketMachineSystem // Note: actual namespace depends on the project n
             var ticketMachine = new TicketMachine(new MenuCsv(), new CategoryCsv());
             ticketMachine.ShowMainMenu();
             Console.ReadLine();
-            var total = ticketMachine.GetTotal();
+            var total = ticketMachine.GetTotalPrice();
             Console.WriteLine($"合計金額:{total}円");
         }
     }

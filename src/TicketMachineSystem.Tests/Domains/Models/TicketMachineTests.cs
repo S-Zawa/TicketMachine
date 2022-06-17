@@ -12,8 +12,6 @@ namespace TicketMachineSystem.Tests.Domains.Models
             var isValid = ticketMachine.AddSelectedMenu(1);
 
             Assert.True(isValid);
-            Assert.Single(ticketMachine.SelectedMenus);
-            Assert.Equal("牛丼", ticketMachine?.SelectedMenus?.FirstOrDefault()?.Name);
         }
 
         [Fact]
@@ -24,19 +22,6 @@ namespace TicketMachineSystem.Tests.Domains.Models
             // 無効な商品番号
             var isValid = ticketMachine.AddSelectedMenu(999);
             Assert.False(isValid);
-            Assert.Empty(ticketMachine.SelectedMenus);
-
-            // 有効な商品番号
-            isValid = ticketMachine.AddSelectedMenu(1);
-            Assert.True(isValid);
-            Assert.Single(ticketMachine.SelectedMenus);
-
-            // 無効な商品番号
-            isValid = ticketMachine.AddSelectedMenu(999);
-            Assert.False(isValid);
-            Assert.Single(ticketMachine.SelectedMenus);
-
-            Assert.Equal("牛丼", ticketMachine?.SelectedMenus?.FirstOrDefault()?.Name);
         }
     }
 }

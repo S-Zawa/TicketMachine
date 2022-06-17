@@ -9,19 +9,24 @@ namespace TicketMachineSystem.Domains.Models
     /// </summary>
     public class TicketMachine
     {
-        private static readonly int DiscountAmount = 50;
         private IMenuRepository _menuRepository;
+
         private ICategoryRepository _categoryRepository;
 
-        private Category[] _categories = new Category[4];
-        private List<Menu> _selectedMenus = new List<Menu>();
-        private List<Menu> _menus = new List<Menu>();
-
-        private List<Menu> _mainMenus = new List<Menu>();
-        private List<Menu> _options = new List<Menu>();
-        private Menu? _lastSelectedMenu = null;
-
+        /// <summary>
+        /// 選択したメニュー
+        /// </summary>
         private SelectedMenu _selectedMenu;
+
+        /// <summary>
+        /// カテゴリ別メニュー
+        /// </summary>
+        private List<CategoryMenu> _categoryMenus;
+
+        /// <summary>
+        /// カテゴリ
+        /// </summary>
+        private List<Category> _categories;
 
         /// <summary>
         /// コンストラクタ
@@ -41,70 +46,47 @@ namespace TicketMachineSystem.Domains.Models
             this._menuRepository = menuRepository;
             this._categoryRepository = categoryRepository;
 
-            this._menus = this._menuRepository.GetAllMenu().ToList();
-            this._mainMenus = this._menuRepository.GetMainMenu().ToList();
+            this._categoryMenus = new List<CategoryMenu>();
+            this._categories = this._categoryRepository.GetAll().ToList();
 
-            var categories = this._categoryRepository.GetAll().ToList();
-
-            var mainCategory = categories?.FirstOrDefault(x => x.No == CategoryNo.Main);
-            this.MainMenu = new MainMenu(mainCategory, this._menuRepository.GetMainMenu().ToList());
+            this.SetCategoryMenus();
 
             this._selectedMenu = new SelectedMenu();
         }
 
-        public CategoryMenu CategoryMenu { get; }
-
         /// <summary>
-        /// メインメニュー
+        /// 全メニュー
         /// </summary>
-        public MainMenu MainMenu { get; }
-
-        /// <summary>
-        /// 選択したメニュー一覧
-        /// </summary>
-        public List<Menu> SelectedMenus { get; private set; } = new List<Menu>();
-
-        /// <summary>
-        /// メインメニュー登録
-        /// </summary>
-        /// <param name="category">カテゴリ</param>
-        public void SetMainMenu(Category category)
+        private IEnumerable<Menu> _allMenus
         {
-            this._categories[0] = category;
+            get
+            {
+                return this._categoryMenus.SelectMany(x => x.Menus);
+            }
         }
 
         /// <summary>
-        /// サイド1登録
+        /// カテゴリ別メニュー関数テーブル
         /// </summary>
-        /// <param name="category">カテゴリ</param>
-        public void SetSide1(Category category)
+        private Dictionary<CategoryNo, Func<CategoryMenu>> _categoryMenuTable
         {
-            this._categories[1] = category;
-        }
-
-        /// <summary>
-        /// サイド2登録
-        /// </summary>
-        /// <param name="category">カテゴリ</param>
-        public void SetSide2(Category category)
-        {
-            this._categories[2] = category;
-        }
-
-        /// <summary>
-        /// オプション登録
-        /// </summary>
-        /// <param name="category">カテゴリ</param>
-        public void SetOption(Category category)
-        {
-            this._categories[3] = category;
+            get
+            {
+                return new Dictionary<CategoryNo, Func<CategoryMenu>>()
+                {
+                    { CategoryNo.Main, () => new MainMenu(this._categories.First(x => x.No == CategoryNo.Main), this._menuRepository.GetByCategoryNo(CategoryNo.Main).ToList()) },
+                    { CategoryNo.Side1, () => new SideMenu1(this._categories.First(x => x.No == CategoryNo.Side1), this._menuRepository.GetByCategoryNo(CategoryNo.Side1).ToList()) },
+                    { CategoryNo.Side2, () => new SideMenu2(this._categories.First(x => x.No == CategoryNo.Side2), this._menuRepository.GetByCategoryNo(CategoryNo.Side2).ToList()) },
+                    { CategoryNo.Option, () => new OptionMenu(this._categories.First(x => x.No == CategoryNo.Option), this._menuRepository.GetByCategoryNo(CategoryNo.Option).ToList()) },
+                };
+            }
         }
 
         /// <summary>
         /// 選択されたメニューの合計金額算出
         /// </summary>
         /// <returns>合計金額</returns>
-        public int GetTotal()
+        public int GetTotalPrice()
         {
             return this._selectedMenu.TotalPrice;
         }
@@ -114,12 +96,7 @@ namespace TicketMachineSystem.Domains.Models
         /// </summary>
         public void ShowMainMenu()
         {
-            Console.WriteLine(this.MainMenu.Category.DisplayName);
-
-            foreach (var mainMenu in this.MainMenu.Menus)
-            {
-                Console.WriteLine($"{nameof(mainMenu.No)}:{mainMenu.No} {nameof(mainMenu.Name)}:{mainMenu.Name} {nameof(mainMenu.Price)}:{mainMenu.DisplayPrice}");
-            }
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -127,13 +104,7 @@ namespace TicketMachineSystem.Domains.Models
         /// </summary>
         public void ShowOption()
         {
-            Console.WriteLine("---オプション---");
-
-            var lastSelectedMenu = this._selectedMenus.LastOrDefault();
-            foreach (var option in this._options.Where(x => x.O == lastSelectedMenu?.O))
-            {
-                Console.WriteLine($"{nameof(option.No)}:{option.No} {nameof(option.Name)}:{option.Name} {nameof(option.Price)}:{option.DisplayPrice}");
-            }
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -147,11 +118,11 @@ namespace TicketMachineSystem.Domains.Models
         /// <summary>
         /// 入力番号を元に選択したメニューに追加
         /// </summary>
-        /// <param name="id">入力番号</param>
+        /// <param name="no">入力番号</param>
         /// <returns>有効な入力番号か</returns>
-        public bool AddSelectedMenu(int id)
+        public bool AddSelectedMenu(int no)
         {
-            var selectedMenu = this._menus?.FirstOrDefault(x => x?.No == id);
+            var selectedMenu = this._allMenus?.FirstOrDefault(x => x?.No == no);
 
             if (selectedMenu is null)
             {
@@ -160,6 +131,23 @@ namespace TicketMachineSystem.Domains.Models
 
             this._selectedMenu.Add(selectedMenu);
             return true;
+        }
+
+        /// <summary>
+        /// カテゴリ別メニューセット
+        /// </summary>
+        /// <exception cref="NotSupportedException">不正な分類番号</exception>
+        private void SetCategoryMenus()
+        {
+            foreach (var category in this._categories)
+            {
+                if (!this._categoryMenuTable.ContainsKey(category.No))
+                {
+                    throw new NotSupportedException();
+                }
+
+                this._categoryMenus.Add(this._categoryMenuTable[category.No]());
+            }
         }
     }
 }

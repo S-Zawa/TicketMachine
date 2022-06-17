@@ -1,4 +1,5 @@
 ﻿using TicketMachineSystem.Domains.Entities;
+using TicketMachineSystem.Domains.Models;
 using TicketMachineSystem.Domains.Repositories;
 
 namespace TicketMachineSystem.Infrastructures.Sqlite
@@ -10,6 +11,12 @@ namespace TicketMachineSystem.Infrastructures.Sqlite
     {
         /// <inheritdoc/>
         public IEnumerable<Menu> GetAllMenu()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<Menu> GetByCategoryNo(CategoryNo categoryNo)
         {
             throw new NotImplementedException();
         }

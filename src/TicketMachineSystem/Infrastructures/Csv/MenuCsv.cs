@@ -19,6 +19,13 @@ namespace TicketMachineSystem.Infrastructures.Csv
         }
 
         /// <inheritdoc/>
+        public IEnumerable<Menu> GetByCategoryNo(CategoryNo categoryNo)
+        {
+            Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == categoryNo);
+        }
+
+        /// <inheritdoc/>
         public IEnumerable<Menu> GetMainMenu()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
