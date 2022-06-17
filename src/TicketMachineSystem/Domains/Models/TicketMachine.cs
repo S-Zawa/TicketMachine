@@ -1,5 +1,4 @@
 ﻿using TicketMachineSystem.Domains.Entities;
-using TicketMachineSystem.Domains.Helpers;
 using TicketMachineSystem.Domains.Repositories;
 using TicketMachineSystem.Infrastructures;
 
@@ -21,6 +20,8 @@ namespace TicketMachineSystem.Domains.Models
         private List<Menu> _mainMenus = new List<Menu>();
         private List<Menu> _options = new List<Menu>();
         private Menu? _lastSelectedMenu = null;
+
+        private SelectedMenu _selectedMenu;
 
         /// <summary>
         /// コンストラクタ
@@ -47,6 +48,8 @@ namespace TicketMachineSystem.Domains.Models
 
             var mainCategory = categories?.FirstOrDefault(x => x.No == CategoryNo.Main);
             this.MainMenu = new MainMenu(mainCategory, this._menuRepository.GetMainMenu().ToList());
+
+            this._selectedMenu = new SelectedMenu();
         }
 
         public CategoryMenu CategoryMenu { get; }
@@ -103,15 +106,7 @@ namespace TicketMachineSystem.Domains.Models
         /// <returns>合計金額</returns>
         public int GetTotal()
         {
-            var total = this._selectedMenus.Sum(selectedMenu => selectedMenu.Price);
-
-            var isDiscount = this._selectedMenus.Select(x => x.N).ToList().ContainsAll(new CategoryNo[] { CategoryNo.Main, CategoryNo.Side1, CategoryNo.Side2 });
-            if (isDiscount)
-            {
-                total -= DiscountAmount;
-            }
-
-            return total;
+            return this._selectedMenu.TotalPrice;
         }
 
         /// <summary>
@@ -146,7 +141,7 @@ namespace TicketMachineSystem.Domains.Models
         /// </summary>
         public void ClearSelectedMenu()
         {
-            this._selectedMenus.Clear();
+            this._selectedMenu.Clear();
         }
 
         /// <summary>
@@ -158,12 +153,12 @@ namespace TicketMachineSystem.Domains.Models
         {
             var selectedMenu = this._menus?.FirstOrDefault(x => x?.No == id);
 
-            if (selectedMenu == null)
+            if (selectedMenu is null)
             {
                 return false;
             }
 
-            this.SelectedMenus.Add(selectedMenu);
+            this._selectedMenu.Add(selectedMenu);
             return true;
         }
     }
