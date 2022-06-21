@@ -3,11 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketMachine", "TicketMachine\TicketMachine.csproj", "{7DA117B7-147C-48E8-AA24-2029193D0328}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketMachineSystem", "TicketMachineSystem\TicketMachineSystem.csproj", "{7DA117B7-147C-48E8-AA24-2029193D0328}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{C6D1E4F4-D833-4909-97AE-931ED018BEE8}"
 	ProjectSection(SolutionItems) = preProject
-		TicketMachine.ruleset = TicketMachine.ruleset
+		TicketMachineSystem.ruleset = TicketMachineSystem.ruleset
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketMachineSystem.Tests", "TicketMachineSystem.Tests\TicketMachineSystem.Tests.csproj", "{0CAC9991-322E-472E-AC6E-73D1A098D891}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{002D171D-E2DC-4A1F-9E7B-70E59264F5EC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Global
@@ -20,6 +27,10 @@ Global
 		{7DA117B7-147C-48E8-AA24-2029193D0328}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DA117B7-147C-48E8-AA24-2029193D0328}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DA117B7-147C-48E8-AA24-2029193D0328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CAC9991-322E-472E-AC6E-73D1A098D891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CAC9991-322E-472E-AC6E-73D1A098D891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CAC9991-322E-472E-AC6E-73D1A098D891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CAC9991-322E-472E-AC6E-73D1A098D891}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
