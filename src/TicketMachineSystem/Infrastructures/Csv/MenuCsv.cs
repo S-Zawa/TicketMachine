@@ -11,46 +11,48 @@ namespace TicketMachineSystem.Infrastructures.Csv
     /// </summary>
     public sealed class MenuCsv : IMenuRepository
     {
+        private static readonly string FileName = $"{nameof(Menu).ToLower()}.csv";
+
         /// <inheritdoc/>
         public IEnumerable<Menu> GetAllMenu()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",");
+            return CsvParser.Read<Menu>(@$"{FileName}", Encoding.GetEncoding("Shift_JIS"), ",");
         }
 
         /// <inheritdoc/>
         public IEnumerable<Menu> GetByCategoryNo(CategoryNo categoryNo)
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == categoryNo);
+            return CsvParser.Read<Menu>(@$"{FileName}", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == categoryNo);
         }
 
         /// <inheritdoc/>
         public IEnumerable<Menu> GetMainMenu()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Main);
+            return CsvParser.Read<Menu>(@$"{FileName}", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Main);
         }
 
         /// <inheritdoc/>
         public IEnumerable<Menu> GetOption()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Option);
+            return CsvParser.Read<Menu>(@$"{FileName}", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Option);
         }
 
         /// <inheritdoc/>
         public IEnumerable<Menu> GetSide1()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Side1);
+            return CsvParser.Read<Menu>(@$"{FileName}", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Side1);
         }
 
         /// <inheritdoc/>
         public IEnumerable<Menu> GetSide2()
         {
             Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            return CsvParser.Read<Menu>(@"menu.csv", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Side2);
+            return CsvParser.Read<Menu>(@$"{FileName}", Encoding.GetEncoding("Shift_JIS"), ",").Where(x => x.N == CategoryNo.Side2);
         }
     }
 }
