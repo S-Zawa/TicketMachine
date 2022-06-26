@@ -1,5 +1,8 @@
-﻿using TicketMachineSystem.Domains.Models;
+﻿using Microsoft.Extensions.Configuration;
+using TicketMachineSystem.Domains.Models;
+using TicketMachineSystem.Domains.Settings;
 using TicketMachineSystem.Infrastructures.Csv;
+using TicketMachineSystem.Infrastructures.Elasticsearch;
 
 namespace TicketMachineSystem // Note: actual namespace depends on the project name.
 {
@@ -10,7 +13,10 @@ namespace TicketMachineSystem // Note: actual namespace depends on the project n
     {
         private static void Main(string[] args)
         {
-            var ticketMachine = new TicketMachine(new MenuCsv(), new CategoryCsv());
+            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var appSettings = configuration.Get<AppSettings>();
+
+            var ticketMachine = new TicketMachine(new MenuCsv(), new CategoryElasticsearch(appSettings));
             ticketMachine.ShowMainMenu();
             Console.ReadLine();
             var total = ticketMachine.GetTotalPrice();
