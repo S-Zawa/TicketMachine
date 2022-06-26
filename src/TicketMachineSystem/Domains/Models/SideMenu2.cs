@@ -41,5 +41,15 @@ namespace TicketMachineSystem.Domains.Models
 
             return true;
         }
+
+        /// <inheritdoc/>
+        public override IEnumerable<string> Show()
+        {
+            var showItems = new List<string>();
+            showItems.Add(this.Category.DisplayName);
+            showItems.AddRange(this.Menus.Select(x => $"{x.No}:{x.Name} / {x.DisplayPrice}"));
+
+            return showItems;
+        }
     }
 }

@@ -15,6 +15,10 @@ namespace TicketMachineSystem.Domains.Models
         public OptionMenu(Category category, List<Menu> menus)
             : base(category, menus)
         {
+            if (!this.IsValid(category, menus))
+            {
+                throw new ArgumentException();
+            }
         }
 
         /// <inheritdoc/>
@@ -36,6 +40,19 @@ namespace TicketMachineSystem.Domains.Models
             }
 
             return true;
+        }
+
+        /// <inheritdoc/>
+
+        public override IEnumerable<string> Show()
+        {
+            var showItems = new List<string>();
+            showItems.Add(this.Category.DisplayName);
+            showItems.AddRange(
+                this.Menus
+                .Select(y => $"{y.No}:{y.Name} / {y.DisplayPrice}"));
+
+            return showItems;
         }
     }
 }

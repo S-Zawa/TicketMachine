@@ -38,5 +38,21 @@ namespace TicketMachineSystem.Domains.Models
         {
             return true;
         }
+
+        /// <summary>
+        /// メニュー一覧表示
+        /// </summary>
+        /// <returns>表示用メニュー一覧</returns>
+        public abstract IEnumerable<string> Show();
+
+        /// <summary>
+        /// 入力されたNoのメニューを取得
+        /// </summary>
+        /// <param name="no">No</param>
+        /// <returns>入力されたメニュー</returns>
+        public Menu? GetMenu(int no)
+        {
+            return this.Menus.FirstOrDefault(x => x.No == no);
+        }
     }
 }

@@ -149,5 +149,35 @@ namespace TicketMachineSystem.Domains.Models
                 this._categoryMenus.Add(this._categoryMenuTable[category.No]());
             }
         }
+
+        /// <summary>
+        /// メニュー一覧の表示
+        /// </summary>
+        public void Show()
+        {
+            for (var i = 0; i < _categoryMenus.Count;)
+            {
+                var items = _categoryMenus[i].Show();
+                foreach (var item in items)
+                {
+                    Console.WriteLine(item);
+                }
+
+                Console.Write(">Noを入力してください:");
+
+                var input = Console.ReadLine();
+
+                if (int.TryParse(input, out var no))
+                {
+                    var selectedMenu = _categoryMenus[i].GetMenu(no);
+                    if (selectedMenu is not null)
+                    {
+                        this._selectedMenu.Add(selectedMenu);
+
+                        i++;
+                    }
+                }
+            }
+        }
     }
 }
