@@ -52,6 +52,17 @@ namespace TicketMachineSystem.Domains.Models
         }
 
         /// <summary>
+        /// 値引きあり
+        /// </summary>
+        public bool IsDiscount
+        {
+            get
+            {
+                return this.menus.Select(x => x.N).ToList().ContainsAll(new CategoryNo[] { CategoryNo.Main, CategoryNo.Side1, CategoryNo.Side2 })
+            }
+        }
+
+        /// <summary>
         /// 選択したメニューに追加
         /// </summary>
         /// <param name="menu">メニュー</param>
@@ -99,8 +110,7 @@ namespace TicketMachineSystem.Domains.Models
         {
             var totalPrice = this.menus.Sum(x => x.Price);
 
-            var isDiscount = this.menus.Select(x => x.N).ToList().ContainsAll(new CategoryNo[] { CategoryNo.Main, CategoryNo.Side1, CategoryNo.Side2 });
-            if (isDiscount)
+            if (this.IsDiscount)
             {
                 return totalPrice - DiscountAmount;
             }
