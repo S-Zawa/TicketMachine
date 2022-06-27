@@ -17,10 +17,10 @@ namespace TicketMachineSystem // Note: actual namespace depends on the project n
             var appSettings = configuration.Get<AppSettings>();
 
             var ticketMachine = new TicketMachine(new MenuCsv(), new CategoryElasticsearch(appSettings));
-            ticketMachine.Show();
-            ;
-            var total = ticketMachine.GetTotalPrice();
-            Console.WriteLine($"合計金額:{total}円");
+            ticketMachine.Order();
+
+            ticketMachine.DisplaySelectedMenuSummary();
+
         }
     }
 }

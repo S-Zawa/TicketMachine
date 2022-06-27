@@ -43,7 +43,7 @@ namespace TicketMachineSystem.Domains.Models
         /// メニュー一覧表示
         /// </summary>
         /// <returns>表示用メニュー一覧</returns>
-        public abstract IEnumerable<string> Show();
+        public abstract IEnumerable<string> GetDisplayMenus();
 
         /// <summary>
         /// 入力されたNoのメニューを取得

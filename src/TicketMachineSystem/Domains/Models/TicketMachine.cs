@@ -24,6 +24,11 @@ namespace TicketMachineSystem.Domains.Models
         private List<CategoryMenu> _categoryMenus;
 
         /// <summary>
+        /// オプション
+        /// </summary>
+        private OptionMenu _optionMenu;
+
+        /// <summary>
         /// カテゴリ
         /// </summary>
         private List<Category> _categories;
@@ -77,7 +82,6 @@ namespace TicketMachineSystem.Domains.Models
                     { CategoryNo.Main, () => new MainMenu(this._categories.First(x => x.No == CategoryNo.Main), this._menuRepository.GetByCategoryNo(CategoryNo.Main).ToList()) },
                     { CategoryNo.Side1, () => new SideMenu1(this._categories.First(x => x.No == CategoryNo.Side1), this._menuRepository.GetByCategoryNo(CategoryNo.Side1).ToList()) },
                     { CategoryNo.Side2, () => new SideMenu2(this._categories.First(x => x.No == CategoryNo.Side2), this._menuRepository.GetByCategoryNo(CategoryNo.Side2).ToList()) },
-                    { CategoryNo.Option, () => new OptionMenu(this._categories.First(x => x.No == CategoryNo.Option), this._menuRepository.GetByCategoryNo(CategoryNo.Option).ToList()) },
                 };
             }
         }
@@ -92,19 +96,12 @@ namespace TicketMachineSystem.Domains.Models
         }
 
         /// <summary>
-        /// メインメニュー表示
+        /// 選択されたメニューの表示用合計金額算出
         /// </summary>
-        public void ShowMainMenu()
+        /// <returns>表示用合計金額</returns>
+        public string GetDisplayTotalPrice()
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// オプション表示
-        /// </summary>
-        public void ShowOption()
-        {
-            throw new NotImplementedException();
+            return this._selectedMenu.DisplayTotalPrice;
         }
 
         /// <summary>
@@ -134,30 +131,81 @@ namespace TicketMachineSystem.Domains.Models
         }
 
         /// <summary>
-        /// カテゴリ別メニューセット
+        /// 注文した商品一覧
         /// </summary>
-        /// <exception cref="NotSupportedException">不正な分類番号</exception>
-        private void SetCategoryMenus()
+        public void DisplaySelectedMenuSummary()
         {
-            foreach (var category in this._categories)
+            Console.WriteLine("注文した商品");
+
+            foreach (var menu in this._selectedMenu.Menus)
             {
-                if (!this._categoryMenuTable.ContainsKey(category.No))
+                Console.WriteLine($"{menu.Name}:{menu.DisplayPrice}");
+            }
+
+            if (this._selectedMenu.IsDiscount)
+            {
+                Console.WriteLine($"値引き有り");
+            }
+
+            var total = this.GetDisplayTotalPrice();
+            Console.WriteLine($"合計金額:{total}");
+        }
+
+        /// <summary>
+        /// オプション注文
+        /// </summary>
+        /// <param name="selectedMenu">選択したメニュー</param>
+        public void OrderOption(Menu selectedMenu)
+        {
+            var isExist = this._optionMenu.IsExistOptions(selectedMenu);
+
+            if (!isExist)
+            {
+                return;
+            }
+
+            var optionMenus = this._optionMenu.GetDisplayMenus(selectedMenu);
+
+            if (optionMenus == null || !optionMenus.Any())
+            {
+                return;
+            }
+
+            foreach (var optionMenu in optionMenus)
+            {
+                Console.WriteLine(optionMenu);
+            }
+
+            Console.Write(">Noを入力してください:");
+            var input = Console.ReadLine();
+
+            if (int.TryParse(input, out var no))
+            {
+                var selectedOption = this._optionMenu.GetMenu(no);
+
+                if (selectedOption == null)
                 {
-                    throw new NotSupportedException();
+                    this.OrderOption(selectedMenu);
+                    return;
                 }
 
-                this._categoryMenus.Add(this._categoryMenuTable[category.No]());
+                this._selectedMenu.Add(selectedOption);
+                return;
+            }
+            else
+            {
+                this.OrderOption(selectedMenu);
             }
         }
 
         /// <summary>
-        /// メニュー一覧の表示
+        /// 注文
         /// </summary>
-        public void Show()
+        public void Order()
         {
-            for (var i = 0; i < _categoryMenus.Count;)
+            for (var i = 0; i < this._categoryMenus.Count;)
             {
-                var items = _categoryMenus[i].Show();
+                var items = this._categoryMenus[i].GetDisplayMenus();
                 foreach (var item in items)
                 {
                     Console.WriteLine(item);
@@ -169,14 +217,38 @@ namespace TicketMachineSystem.Domains.Models
 
                 if (int.TryParse(input, out var no))
                 {
-                    var selectedMenu = _categoryMenus[i].GetMenu(no);
-                    if (selectedMenu is not null)
+                    var selectedMenu = this._categoryMenus[i].GetMenu(no);
+                    if (selectedMenu != null)
                     {
                         this._selectedMenu.Add(selectedMenu);
+                        this.OrderOption(selectedMenu);
 
                         i++;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// カテゴリ別メニューセット
+        /// </summary>
+        /// <exception cref="NotSupportedException">不正な分類番号</exception>
+        private void SetCategoryMenus()
+        {
+            foreach (var category in this._categories)
+            {
+                if (category.No == CategoryNo.Option)
+                {
+                    this._optionMenu = new OptionMenu(this._categories.First(x => x.No == CategoryNo.Option), this._menuRepository.GetByCategoryNo(CategoryNo.Option).ToList());
+                    continue;
+                }
+
+                if (!this._categoryMenuTable.ContainsKey(category.No))
+                {
+                    throw new NotSupportedException();
+                }
+
+                this._categoryMenus.Add(this._categoryMenuTable[category.No]());
             }
         }
     }

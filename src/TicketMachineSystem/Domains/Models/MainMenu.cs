@@ -43,7 +43,7 @@ namespace TicketMachineSystem.Domains.Models
         }
 
         /// <inheritdoc/>
-        public override IEnumerable<string> Show()
+        public override IEnumerable<string> GetDisplayMenus()
         {
             var showItems = new List<string>();
             showItems.Add(this.Category.DisplayName);

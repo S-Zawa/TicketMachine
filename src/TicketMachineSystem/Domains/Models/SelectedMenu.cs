@@ -58,7 +58,7 @@ namespace TicketMachineSystem.Domains.Models
         {
             get
             {
-                return this.menus.Select(x => x.N).ToList().ContainsAll(new CategoryNo[] { CategoryNo.Main, CategoryNo.Side1, CategoryNo.Side2 })
+                return this.menus.Select(x => x.N).ToList().ContainsAll(new CategoryNo[] { CategoryNo.Main, CategoryNo.Side1, CategoryNo.Side2 });
             }
         }
 
